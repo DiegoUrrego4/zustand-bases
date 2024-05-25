@@ -1,5 +1,6 @@
 import {WhiteCard} from '../../components';
 import {useBearStore} from "../../stores";
+import {useShallow} from "zustand/react/shallow";
 
 export const BearPage = () => {
 
@@ -14,6 +15,7 @@ export const BearPage = () => {
                 <BlackBears/>
                 <PolarBears/>
                 <PandaBears/>
+                <BearDisplay/>
             </div>
 
         </>
@@ -77,6 +79,28 @@ export const PandaBears = () => {
                 <button onClick={() => increasePandaBears(-1)}>-1</button>
             </div>
 
+        </WhiteCard>
+    )
+}
+
+export const BearDisplay = () => {
+    // ? Objetos anidados
+    // * useShallow → Analiza propiedades del objeto y verificará si efectivamente cambiaron
+    // * Si cambiaron se renderiza nuevamente, si no, no hace nada
+    const bears = useBearStore(useShallow(state => state.bears))
+    const doNothing = useBearStore(state => state.doNothing)
+    const addBears = useBearStore(state => state.addBears)
+    const clearBears = useBearStore(state => state.clearBears)
+
+    return (
+        <WhiteCard>
+            <h1>Osos</h1>
+            <button onClick={doNothing}>No hace nada</button>
+            <button className="mt-2" onClick={addBears}>Agregar Oso</button>
+            <button className="mt-2" onClick={clearBears}>Borrar Osos</button>
+            <pre>
+                {JSON.stringify(bears, null, 2)}
+            </pre>
         </WhiteCard>
     )
 }
